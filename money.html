@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Money & Retainers · Moments OS</title>
+<meta name="description" content="What came in, what is owed, and the costs a solo forgets are costs.">
+<link rel="canonical" href="https://www.aexperiences.com/apps/moments/money.html">
+<meta property="og:title" content="Money & Retainers · Moments OS">
+<meta property="og:description" content="What came in, what is owed, and the costs a solo forgets are costs.">
+<meta property="og:image" content="https://www.aexperiences.com/Moments_OS.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://www.aexperiences.com/Moments_OS.png">
+<link rel="apple-touch-icon" href="https://www.aexperiences.com/Moments_OS.png">
+<meta name="theme-color" content="#6b5bb5">
+<link rel="stylesheet" href="moments.css">
+</head>
+<body>
+<script src="moments.js"></script>
+<script src="manual.js"></script>
+<script>
+(function(){
+  var S = window.Moments;
+  var content = S.mount({ active:"money.html", crumb:"Money & retainers" });
+
+  content.appendChild(S.page("Money & retainers","The second shooter, the mileage both ways, the album at trade cost and a year of storage. None of them feel like costs on the day."));
+  var k=S.kpis();
+  content.appendChild(S.card('<h2>The year</h2><div class="stats">'+
+    S.stat("Collected", S.money(k.collected), "in the bank")+
+    S.stat("Outstanding", S.money(k.outstanding), "delivered or held and not paid", k.outstanding>2000?"bad":"watch")+
+    S.stat("Pipeline", S.money(k.pipeline), "not booked yet")+
+    S.stat("Hours committed", S.hrs(k.hours), "all in")+
+    S.stat("Your real rate", S.money2(k.trueHourly), "target "+S.money2(k.target), k.trueHourly>=k.target?"good":"bad")+
+    '</div>'));
+  var owed=S.db().jobs.filter(function(j){ return (j.price||0)-(j.paid||0) > 0 && j.stage!=="Lost"; });
+  if(owed.length) content.appendChild(S.card('<h2>Owed to you</h2><div class="tablewrap"><table>'+
+    '<thead><tr><th>Client</th><th>Job</th><th>Stage</th><th class="right">Price</th><th class="right">Paid</th><th class="right">Owed</th></tr></thead><tbody>'+
+    owed.map(function(j){ return '<tr><td><b>'+S.esc(S.clientName(j.client))+'</b></td><td class="mut">'+S.esc(S.jobType(j.type).n)+'</td>'+
+      '<td>'+S.tag(j.stage, j.stage==="Delivered"?"bad":"watch")+'</td>'+
+      '<td class="right mono">'+S.money(j.price)+'</td><td class="right mono">'+S.money(j.paid||0)+'</td>'+
+      '<td class="right mono"><b>'+S.money((j.price||0)-(j.paid||0))+'</b></td></tr>'; }).join("")+
+    '</tbody></table></div><p class="sub">A job marked Delivered with money outstanding is the worst row on this page — the work has left the building and the leverage went with it.</p>'));
+  content.appendChild(S.card('<h2>What it costs you to run</h2><div class="tablewrap"><table>'+
+    '<thead><tr><th>Cost</th><th class="right">Rate</th></tr></thead><tbody>'+
+    '<tr><td>Second shooter</td><td class="right mono">'+S.money(S.COSTS.secondShooter)+'/hr</td></tr>'+
+    '<tr><td>Assistant</td><td class="right mono">'+S.money(S.COSTS.assistant)+'/hr</td></tr>'+
+    '<tr><td>Mileage (both ways)</td><td class="right mono">'+S.money2(S.COSTS.mileage)+'/mi</td></tr>'+
+    '<tr><td>Storage</td><td class="right mono">'+S.money(S.COSTS.storagePerTB)+'/TB/mo</td></tr>'+
+    '<tr><td>Album at trade cost</td><td class="right mono">'+S.money(S.COSTS.albumCost)+'</td></tr>'+
+    '<tr><td>Your target rate</td><td class="right mono">'+S.money(S.RATES.targetHourly)+'/hr</td></tr>'+
+    '</tbody></table></div>'));
+  content.appendChild(S.card('<h2>What it replaces</h2><div class="tablewrap"><table><tbody>'+
+    S.REPLACES.map(function(r){ return '<tr><td>'+S.esc(r[0])+'</td><td class="right mut">'+S.esc(r[1])+'</td></tr>'; }).join("")+
+    '</tbody></table></div><p class="sub">Starter is '+S.money(S.TIERS.starter.mo)+' a month and includes the video editor, which none of the tools above have.</p>'));
+
+})();
+</script>
+</body>
+</html>

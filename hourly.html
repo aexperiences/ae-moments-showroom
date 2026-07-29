@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>True Hourly · Moments OS</title>
+<meta name="description" content="Every hour a job actually took, not just the ones with a camera in your hand.">
+<link rel="canonical" href="https://www.aexperiences.com/apps/moments/hourly.html">
+<meta property="og:title" content="True Hourly · Moments OS">
+<meta property="og:description" content="Every hour a job actually took, not just the ones with a camera in your hand.">
+<meta property="og:image" content="https://www.aexperiences.com/Moments_OS.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://www.aexperiences.com/Moments_OS.png">
+<link rel="apple-touch-icon" href="https://www.aexperiences.com/Moments_OS.png">
+<meta name="theme-color" content="#6b5bb5">
+<link rel="stylesheet" href="moments.css">
+</head>
+<body>
+<script src="moments.js"></script>
+<script src="manual.js"></script>
+<script>
+(function(){
+  var S = window.Moments;
+  var content = S.mount({ active:"hourly.html", crumb:"True hourly" });
+
+  content.appendChild(S.page("True hourly","The shoot was eight hours. The job was thirty-seven. Every pricing decision you will ever make sits downstream of a number most people in this trade have never written down."));
+  function draw(){
+    var host=document.getElementById("jl"); host.innerHTML="";
+    S.db().jobs.slice().sort(function(a,b){ return (S.trueHourly(a)==null?1e9:S.trueHourly(a)) - (S.trueHourly(b)==null?1e9:S.trueHourly(b)); })
+    .forEach(function(j0){
+      var j=S.jobById(j0.id)||j0, t=S.jobType(j.type), c=S.jobCosts(j), th=S.trueHourly(j);
+      var logged=(j.postHrs&&j.postHrs>0);
+      var h='<div class="rowitem"><div class="ri-main"><b>'+S.esc(S.clientName(j.client))+'</b> '+S.tag(t.n)+' '+S.tag(j.stage, j.stage==="Lost"?"bad":j.stage==="Closed"?"good":"")+
+        '<div class="mut">'+S.dayLabel(j.date)+' · '+S.esc(t.deliver)+'</div>'+
+        '<div class="hourly">'+
+          '<div class="h"><b>'+j.shootHrs+'h</b><span>Shoot</span></div>'+
+          '<div class="h"><b>'+S.postHours(j).toFixed(1)+'h</b><span>Post '+(logged?"(logged)":"(projected)")+'</span></div>'+
+          '<div class="h"><b>'+S.travelHours(j).toFixed(1)+'h</b><span>Travel</span></div>'+
+          '<div class="h"><b>'+S.revisionHours(j).toFixed(1)+'h</b><span>Extra revisions</span></div>'+
+          '<div class="h"><b>'+S.totalHours(j).toFixed(1)+'h</b><span>Total</span></div>'+
+        '</div>'+
+        '<div class="hourly">'+
+          '<div class="h"><b>'+S.money(j.price)+'</b><span>Price</span></div>'+
+          '<div class="h"><b>'+S.money(c.total)+'</b><span>Costs</span></div>'+
+          '<div class="h felt"><b>'+S.money2(S.quotedHourly(j))+'</b><span>Felt like</span></div>'+
+          '<div class="h real '+((th!=null&&th>=S.RATES.targetHourly)?"ok":"")+'"><b>'+(th==null?"not quoted":S.money2(th))+'</b><span>Actually</span></div>'+
+        '</div>';
+      var iss=S.jobIssues(j);
+      if(iss.length) h+='<div class="blockers"><b>What this job is telling you:</b><ul><li>'+iss.map(S.esc).join('</li><li>')+'</li></ul></div>';
+      h+='<div class="ri-act"><button class="btn small" data-post="'+j.id+'">Log 2h of post</button> '+
+         '<button class="btn small" data-rev="'+j.id+'">Client asked for another revision</button></div></div></div>';
+      host.appendChild(S.el('<div>'+h+'</div>'));
+    });
+    [].forEach.call(host.querySelectorAll("[data-post]"),function(b){ b.addEventListener("click",function(){
+      S.logPost(b.dataset.post,2); S.toast("Two hours logged. Watch the real rate move."); draw(); }); });
+    [].forEach.call(host.querySelectorAll("[data-rev]"),function(b){ b.addEventListener("click",function(){
+      S.addRevision(b.dataset.rev); S.toast("Recorded. Beyond the contract it is unbilled time."); draw(); }); });
+  }
+  content.appendChild(S.card('<h2>Every job, worst first</h2><p class="sub">Post hours show a projection until you log real ones — so a quote can be sanity-checked before you send it rather than regretted after.</p><div id="jl"></div>'));
+  draw();
+  content.appendChild(S.card('<h2>Where the multipliers come from</h2><p class="sub">Each job type carries an estimate of how many desk hours each shooting hour creates. These are our judgement from the trade, not research, and they are marked that way rather than dressed up as data.</p>'+
+    '<div class="tablewrap"><table><thead><tr><th>Job type</th><th class="right">Post hours per shoot hour</th><th class="right">Typical base</th></tr></thead><tbody>'+
+    S.JOB_TYPES.map(function(t){ return '<tr><td>'+S.esc(t.n)+(t.licensed?' '+S.tag("licensable","watch"):'')+'</td>'+
+      '<td class="right mono">'+t.postPerHr.toFixed(1)+'×</td><td class="right mono">'+S.money(t.base)+'</td></tr>'; }).join("")+
+    '</tbody></table></div>'));
+
+})();
+</script>
+</body>
+</html>

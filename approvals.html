@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Approval Desk · Moments OS</title>
+<meta name="description" content="Nothing sends or spends without you.">
+<link rel="canonical" href="https://www.aexperiences.com/apps/moments/approvals.html">
+<meta property="og:title" content="Approval Desk · Moments OS">
+<meta property="og:description" content="Nothing sends or spends without you.">
+<meta property="og:image" content="https://www.aexperiences.com/Moments_OS.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://www.aexperiences.com/Moments_OS.png">
+<link rel="apple-touch-icon" href="https://www.aexperiences.com/Moments_OS.png">
+<meta name="theme-color" content="#6b5bb5">
+<link rel="stylesheet" href="moments.css">
+</head>
+<body>
+<script src="moments.js"></script>
+<script src="manual.js"></script>
+<script>
+(function(){
+  var S = window.Moments;
+  var content = S.mount({ active:"approvals.html", crumb:"Approval desk" });
+
+  content.appendChild(S.page("Approval desk","Anything that sends to a client, spends money or changes a price waits here for you."));
+  content.appendChild(S.card('<h2>Nothing waiting</h2><p class="sub">When the system wants to send a gallery, chase a balance, or release a licence, it stops here first and puts your name on the decision.</p>'));
+  content.appendChild(S.card('<h2>What always stops here</h2><ul>'+
+    ["Sending a gallery or a contract to a client","Chasing an outstanding balance","Changing a package price",
+     "Releasing images under a new licence","Deleting or retiring a gallery","Anything that would spend money"]
+    .map(function(x){ return '<li>'+x+'</li>'; }).join("")+'</ul>'));
+
+})();
+</script>
+</body>
+</html>

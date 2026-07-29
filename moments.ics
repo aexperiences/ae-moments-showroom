@@ -1,0 +1,122 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Accelerated Experiences LLC//Moments OS//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+X-WR-CALNAME:Moments OS — Wren & Field
+BEGIN:VEVENT
+UID:j1@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20260913
+SUMMARY:Devon & Marisol Ayers — Wedding
+DESCRIPTION:Booked. 9h booked, 35.1h all in. $3,800
+END:VEVENT
+BEGIN:VEVENT
+UID:j2@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20260715
+SUMMARY:Halcyon Coffee Roasters — Product / commercial
+DESCRIPTION:Delivered. 5h booked, 19.3h all in. $1,450
+END:VEVENT
+BEGIN:VEVENT
+UID:j3@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20260722
+SUMMARY:The Ferraro family — Family session
+DESCRIPTION:In post. 1.5h booked, 7.1h all in. $395
+END:VEVENT
+BEGIN:VEVENT
+UID:j4@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20260708
+SUMMARY:Kestrel Dental — Headshots — business
+DESCRIPTION:Closed. 4h booked, 11.0h all in. $1,210
+END:VEVENT
+BEGIN:VEVENT
+UID:j5@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20260624
+SUMMARY:Junie & Tom Alcaraz — Wedding
+DESCRIPTION:Delivered. 10h booked, 45.6h all in. $3,500
+END:VEVENT
+BEGIN:VEVENT
+UID:j6@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20260724
+SUMMARY:Northbend Realty — Real estate listing
+DESCRIPTION:Delivered. 1.5h booked, 5.2h all in. $275
+END:VEVENT
+BEGIN:VEVENT
+UID:j7@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20260701
+SUMMARY:Odette Lamb — Newborn
+DESCRIPTION:Closed. 2.5h booked, 10.2h all in. $550
+END:VEVENT
+BEGIN:VEVENT
+UID:j8@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20260617
+SUMMARY:Ridgeline Outfitters — Brand video
+DESCRIPTION:Delivered. 7h booked, 62.8h all in. $2,800
+END:VEVENT
+BEGIN:VEVENT
+UID:j9@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20260817
+SUMMARY:Silas & Wren Moreau — Elopement
+DESCRIPTION:Retainer due. 4h booked, 18.8h all in. $1,650
+END:VEVENT
+BEGIN:VEVENT
+UID:j10@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20260805
+SUMMARY:Cedar Ridge Dental — Headshots — business
+DESCRIPTION:Quoted. 3h booked, 8.5h all in. $0
+END:VEVENT
+BEGIN:VEVENT
+UID:j11@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20260530
+SUMMARY:Halcyon Coffee Roasters — Social content pack
+DESCRIPTION:Closed. 3h booked, 18.8h all in. $850
+END:VEVENT
+BEGIN:VEVENT
+UID:j12@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20260717
+SUMMARY:Northbend Realty — Real estate listing
+DESCRIPTION:Delivered. 1.5h booked, 4.9h all in. $275
+END:VEVENT
+BEGIN:VEVENT
+UID:j13@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20260913
+SUMMARY:Devon & Marisol Ayers — Wedding film
+DESCRIPTION:Booked. 9h booked, 65.7h all in. $2,900
+END:VEVENT
+BEGIN:VEVENT
+UID:gal-g3@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20270626
+SUMMARY:Gallery expires — Ridgeline Outfitters
+END:VEVENT
+BEGIN:VEVENT
+UID:gal-g1@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20270701
+SUMMARY:Gallery expires — Junie & Tom Alcaraz
+END:VEVENT
+BEGIN:VEVENT
+UID:gal-g2@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20270718
+SUMMARY:Gallery expires — Halcyon Coffee Roasters
+END:VEVENT
+BEGIN:VEVENT
+UID:gal-g7@moments.aexperiences.com
+DTSTAMP:20260727T080000Z
+DTSTART;VALUE=DATE:20270725
+SUMMARY:Gallery expires — Northbend Realty
+END:VEVENT
+END:VCALENDAR

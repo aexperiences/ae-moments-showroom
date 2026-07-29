@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calendar · Moments OS</title>
+<meta name="description" content="Shoot dates and delivery deadlines, subscribable from your phone.">
+<link rel="canonical" href="https://www.aexperiences.com/apps/moments/calendar.html">
+<meta property="og:title" content="Calendar · Moments OS">
+<meta property="og:description" content="Shoot dates and delivery deadlines, subscribable from your phone.">
+<meta property="og:image" content="https://www.aexperiences.com/Moments_OS.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://www.aexperiences.com/Moments_OS.png">
+<link rel="apple-touch-icon" href="https://www.aexperiences.com/Moments_OS.png">
+<meta name="theme-color" content="#6b5bb5">
+<link rel="stylesheet" href="moments.css">
+</head>
+<body>
+<script src="moments.js"></script>
+<script src="manual.js"></script>
+<script>
+(function(){
+  var S = window.Moments;
+  var content = S.mount({ active:"calendar.html", crumb:"Calendar" });
+
+  content.appendChild(S.page("Calendar","Subscribe once and it keeps itself current."));
+  var url=location.href.replace(/calendar\.html.*$/,"")+"moments.ics";
+  content.appendChild(S.card('<h2>Subscribe</h2><p class="sub">Add this as a subscribed calendar in Google or Apple Calendar. Read-only, refreshes on its own.</p>'+
+    '<div class="mono" style="word-break:break-all;background:var(--sunk);padding:11px 13px;border-radius:12px">'+S.esc(url)+'</div>'+
+    '<div class="ri-act" style="margin-top:11px"><a class="btn primary" href="moments.ics">Download the file</a> '+
+    '<a class="btn" href="https://calendar.google.com/calendar/r/settings/addbyurl" target="_blank" rel="noopener">Add in Google Calendar</a></div>'));
+  content.appendChild(S.card('<h2>On the books</h2><div class="tablewrap"><table><thead><tr><th>When</th><th>Client</th><th>Job</th><th>Stage</th></tr></thead><tbody>'+
+    S.db().jobs.slice().sort(function(a,b){ return a.date<b.date?-1:1; }).map(function(j){
+      return '<tr><td class="mono">'+S.dayLabel(j.date)+'</td><td>'+S.esc(S.clientName(j.client))+'</td>'+
+        '<td class="mut">'+S.esc(S.jobType(j.type).n)+'</td><td>'+S.tag(j.stage)+'</td></tr>'; }).join("")+
+    '</tbody></table></div>'));
+
+})();
+</script>
+</body>
+</html>

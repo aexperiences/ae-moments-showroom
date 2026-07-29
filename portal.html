@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Client Portal · Moments OS</title>
+<meta name="description" content="What the client sees — their date, what is included, what they owe, and where the gallery is.">
+<link rel="canonical" href="https://www.aexperiences.com/apps/moments/portal.html">
+<meta property="og:title" content="Client Portal · Moments OS">
+<meta property="og:description" content="What the client sees — their date, what is included, what they owe, and where the gallery is.">
+<meta property="og:image" content="https://www.aexperiences.com/Moments_OS.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://www.aexperiences.com/Moments_OS.png">
+<link rel="apple-touch-icon" href="https://www.aexperiences.com/Moments_OS.png">
+<meta name="theme-color" content="#6b5bb5">
+<link rel="stylesheet" href="moments.css">
+</head>
+<body>
+<script src="moments.js"></script>
+<script src="manual.js"></script>
+<script>
+(function(){
+  var S = window.Moments;
+  var content = S.mount({ active:"portal.html", crumb:"Client portal" });
+
+  content.appendChild(S.page("Client portal","What the client sees. Plain language, no jargon, and the number they owe is never a surprise."));
+  var j=S.jobById("j1"), c=S.clientById(j.client), t=S.jobType(j.type);
+  content.appendChild(S.card('<h2>'+S.esc(c.name)+'</h2><p class="sub">'+S.esc(t.n)+' · '+S.dayLabel(j.date)+' · '+j.shootHrs+' hours of coverage</p>'+
+    '<div class="hourly">'+
+      '<div class="h"><b>'+S.money(j.price)+'</b><span>Your package</span></div>'+
+      '<div class="h"><b>'+S.money(j.paid||0)+'</b><span>Paid so far</span></div>'+
+      '<div class="h"><b>'+S.money((j.price||0)-(j.paid||0))+'</b><span>Balance</span></div>'+
+    '</div>'+
+    '<p class="sub"><b>What you get:</b> '+S.esc(t.deliver)+'. Your gallery stays open for twelve months — please download and back up your files before it closes. We keep archives as a courtesy, not as a guarantee.</p>'));
+  var docs=S.db().documents;
+  content.appendChild(S.card('<h2>Your paperwork</h2>'+(docs.length?
+    docs.map(function(d){ return '<div class="rowitem"><div class="ri-main"><b>'+S.esc(d.name)+'</b> '+S.tag(d.status,d.status==="Signed"?"good":"watch")+'</div></div>'; }).join("")
+    :'<p class="sub">Nothing waiting for a signature right now.</p>')));
+  content.appendChild(S.card('<h2>Who owns what</h2><p class="sub">You own your photographs — the files, the gallery and the right to print and share them as your package describes. We keep the copyright, which is standard and is what lets us show the work in a portfolio. If you need the images for business use, that is a usage licence and we will quote it plainly rather than leaving it vague.</p>'));
+
+})();
+</script>
+</body>
+</html>

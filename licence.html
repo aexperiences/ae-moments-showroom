@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Usage Licensing · Moments OS</title>
+<meta name="description" content="A commercial client is buying permission, not photographs — for a term, a territory and a set of media.">
+<link rel="canonical" href="https://www.aexperiences.com/apps/moments/licence.html">
+<meta property="og:title" content="Usage Licensing · Moments OS">
+<meta property="og:description" content="A commercial client is buying permission, not photographs — for a term, a territory and a set of media.">
+<meta property="og:image" content="https://www.aexperiences.com/Moments_OS.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://www.aexperiences.com/Moments_OS.png">
+<link rel="apple-touch-icon" href="https://www.aexperiences.com/Moments_OS.png">
+<meta name="theme-color" content="#6b5bb5">
+<link rel="stylesheet" href="moments.css">
+</head>
+<body>
+<script src="moments.js"></script>
+<script src="manual.js"></script>
+<script>
+(function(){
+  var S = window.Moments;
+  var content = S.mount({ active:"licence.html", crumb:"Usage licensing" });
+
+  content.appendChild(S.page("Usage licensing","They are not paying for files. They are paying for the right to use them. A solo who charges a day rate and hands over unlimited rights has given away the most valuable part of the deal and will never see it on an invoice."));
+  var un=S.unlicensedCommercial();
+  if(un.length) content.appendChild(S.card('<h2>Commercial work with no licence on file</h2>'+
+    '<div class="blockers"><b>These clients are using your work to make money at a personal-use price.</b><ul>'+
+    un.map(function(j){ return '<li>'+S.esc(S.clientName(j.client))+' — '+S.esc(S.jobType(j.type).n)+
+      ', paid '+S.money(j.price)+'. A web and social licence on this job would be '+S.money(S.licensedPrice(j.type,"web"))+
+      ' — a gap of <b>'+S.money(S.licenceGap(j))+'</b>.</li>'; }).join("")+'</ul></div>','urgent'));
+
+  content.appendChild(S.card('<h2>What the permission is worth</h2><p class="sub">Pick a job type and see what each licence should add. The multiplier is applied to your base, so you can quote the permission instead of guessing at it.</p>'+
+    '<div class="ri-act" style="margin-bottom:12px"><select id="jt">'+
+    S.JOB_TYPES.filter(function(t){return t.licensed;}).map(function(t){ return '<option value="'+t.k+'">'+S.esc(t.n)+'</option>'; }).join("")+
+    '</select></div><div id="lic"></div>'));
+  function drawLic(){
+    var k=document.getElementById("jt").value;
+    document.getElementById("lic").innerHTML=S.LICENSE_TERMS.map(function(l){
+      return '<div class="licrow"><span>'+S.esc(l.n)+'</span><b>'+S.money(S.licensedPrice(k,l.k))+'</b></div>'; }).join("");
+  }
+  document.getElementById("jt").addEventListener("change",drawLic); drawLic();
+
+  content.appendChild(S.card('<h2>Set a licence on a job</h2><div id="setl"></div>'));
+  function drawSet(){
+    var host=document.getElementById("setl"); host.innerHTML="";
+    S.db().jobs.filter(function(j){ return S.jobType(j.type).licensed; }).forEach(function(j){
+      host.appendChild(S.el('<div class="rowitem"><div class="ri-main"><b>'+S.esc(S.clientName(j.client))+'</b> '+
+        S.tag(S.jobType(j.type).n)+' <span class="mut">'+S.money(j.price)+'</span>'+
+        '<div class="mut">Currently: '+S.esc(S.licenceBy(j.lic).n)+'</div>'+
+        '<div class="ri-act"><select data-l="'+j.id+'">'+S.LICENSE_TERMS.map(function(l){
+          return '<option value="'+l.k+'"'+(l.k===j.lic?" selected":"")+'>'+S.esc(l.n)+'</option>'; }).join("")+
+        '</select></div></div></div>'));
+    });
+    [].forEach.call(host.querySelectorAll("[data-l]"),function(sel){
+      sel.addEventListener("change",function(){ S.setLicence(sel.dataset.l, sel.value);
+        S.toast("Licence recorded. That is renewal money with a date on it."); setTimeout(function(){location.reload();},600); }); });
+  }
+  drawSet();
+
+})();
+</script>
+</body>
+</html>

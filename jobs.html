@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jobs & Pipeline · Moments OS</title>
+<meta name="description" content="Enquiry to closed, with the retainer and the real hours attached to every stage.">
+<link rel="canonical" href="https://www.aexperiences.com/apps/moments/jobs.html">
+<meta property="og:title" content="Jobs & Pipeline · Moments OS">
+<meta property="og:description" content="Enquiry to closed, with the retainer and the real hours attached to every stage.">
+<meta property="og:image" content="https://www.aexperiences.com/Moments_OS.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://www.aexperiences.com/Moments_OS.png">
+<link rel="apple-touch-icon" href="https://www.aexperiences.com/Moments_OS.png">
+<meta name="theme-color" content="#6b5bb5">
+<link rel="stylesheet" href="moments.css">
+</head>
+<body>
+<script src="moments.js"></script>
+<script src="manual.js"></script>
+<script>
+(function(){
+  var S = window.Moments;
+  var content = S.mount({ active:"jobs.html", crumb:"Jobs & pipeline" });
+
+  content.appendChild(S.page("Jobs & pipeline","Enquiry to closed. The retainer is what holds the date — everything before it is a hope."));
+  var k=S.kpis();
+  content.appendChild(S.card('<h2>Where the work is</h2><div class="stats">'+
+    S.STAGES.map(function(st){ var n=S.byStage(st).length;
+      return S.stat(st, n, "", st==="Lost"&&n?"bad":n?"":"" ); }).join("")+'</div>'));
+  function draw(){
+    var host=document.getElementById("pl"); host.innerHTML="";
+    S.db().jobs.slice().sort(function(a,b){ return a.date<b.date?1:-1; }).forEach(function(j0){
+      var j=S.jobById(j0.id)||j0, t=S.jobType(j.type), th=S.trueHourly(j);
+      var owed=Math.max(0,(j.price||0)-(j.paid||0));
+      var h='<div class="rowitem"><div class="ri-main"><b>'+S.esc(S.clientName(j.client))+'</b> '+S.tag(t.n)+' '+
+        S.tag(j.stage, j.stage==="Lost"?"bad":(j.stage==="Closed"?"good":"watch"))+
+        '<div class="mut">'+S.dayLabel(j.date)+' · '+j.shootHrs+'h booked · '+S.esc(t.deliver)+'</div>'+
+        '<div class="hourly">'+
+          '<div class="h"><b>'+(j.price?S.money(j.price):"—")+'</b><span>Price</span></div>'+
+          '<div class="h"><b>'+S.money(j.retainer||0)+'</b><span>Retainer</span></div>'+
+          '<div class="h"><b>'+S.money(j.paid||0)+'</b><span>Paid</span></div>'+
+          '<div class="h '+(owed>0?"real":"")+'"><b>'+S.money(owed)+'</b><span>Owed</span></div>'+
+          '<div class="h real '+((th!=null&&th>=S.RATES.targetHourly)?"ok":"")+'"><b>'+(th==null?"—":S.money2(th))+'</b><span>True hourly</span></div>'+
+        '</div>';
+      var iss=S.jobIssues(j);
+      if(iss.length) h+='<div class="blockers"><ul><li>'+iss.map(S.esc).join('</li><li>')+'</li></ul></div>';
+      h+='<div class="ri-act"><select data-st="'+j.id+'">'+S.STAGES.map(function(s){
+        return '<option value="'+s+'"'+(s===j.stage?" selected":"")+'>'+s+'</option>'; }).join("")+'</select>'+
+        (owed>0?' <button class="btn small primary" data-pay="'+j.id+'">Take '+S.money(owed)+'</button>':'')+
+        '</div></div></div>';
+      host.appendChild(S.el('<div>'+h+'</div>'));
+    });
+    [].forEach.call(host.querySelectorAll("[data-st]"),function(sel){ sel.addEventListener("change",function(){
+      S.setStage(sel.dataset.st, sel.value); S.toast("Moved to "+sel.value+"."); draw(); }); });
+    [].forEach.call(host.querySelectorAll("[data-pay]"),function(b){ b.addEventListener("click",function(){
+      var j=S.jobById(b.dataset.pay); S.takePayment(j.id, (j.price||0)-(j.paid||0));
+      S.toast("Recorded. The processor moves the money — we just know about it."); draw(); }); });
+  }
+  content.appendChild(S.card('<h2>Every job</h2><div id="pl"></div>'));
+  draw();
+
+})();
+</script>
+</body>
+</html>

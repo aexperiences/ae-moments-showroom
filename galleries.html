@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Galleries · Moments OS</title>
+<meta name="description" content="What is delivered, what is expiring, and what the shelf costs you every month.">
+<link rel="canonical" href="https://www.aexperiences.com/apps/moments/galleries.html">
+<meta property="og:title" content="Galleries · Moments OS">
+<meta property="og:description" content="What is delivered, what is expiring, and what the shelf costs you every month.">
+<meta property="og:image" content="https://www.aexperiences.com/Moments_OS.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://www.aexperiences.com/Moments_OS.png">
+<link rel="apple-touch-icon" href="https://www.aexperiences.com/Moments_OS.png">
+<meta name="theme-color" content="#6b5bb5">
+<link rel="stylesheet" href="moments.css">
+</head>
+<body>
+<script src="moments.js"></script>
+<script src="manual.js"></script>
+<script>
+(function(){
+  var S = window.Moments;
+  var content = S.mount({ active:"galleries.html", crumb:"Galleries & delivery" });
+
+  content.appendChild(S.page("Galleries & delivery","Every delivered gallery is storage you pay for whether anyone opens it or not — and when one expires, a client who never got round to downloading loses their photographs."));
+  var k=S.kpis(), gs=S.galleryState();
+  content.appendChild(S.card('<h2>The shelf</h2><div class="stats">'+
+    S.stat("Everything you hold", S.money2(k.storage)+"/mo", (S.db().studio.storageTB||0)+" TB including archives")+
+    S.stat("Delivered galleries", S.money2(k.galleryStorage)+"/mo", gs.length+" live on the shelf")+
+    S.stat("Expired", k.dead, "clients can no longer reach these", k.dead?"bad":"good")+
+    S.stat("Expiring within 30 days", k.expiring, "warn them now", k.expiring?"watch":"good")+
+    '</div><p class="sub">The storage bill is genuinely small — we are not going to pretend otherwise. The expiry is what matters: an expired gallery is a client who cannot get their own wedding photographs, and that is a phone call you do not want.</p>'));
+  function draw(){
+    var host=document.getElementById("gl"); host.innerHTML="";
+    S.galleryState().forEach(function(x){
+      var band={expired:"bad",expiring:"watch",live:"good"}[x.state];
+      var label={expired:Math.abs(x.days)+" days ago",expiring:"in "+x.days+" days",live:"in "+x.days+" days"}[x.state];
+      host.appendChild(S.el('<div class="rowitem"><div class="ri-main"><b>'+S.esc(x.job?S.clientName(x.job.client):"—")+'</b> '+
+        S.tag(x.state==="expired"?"expired "+label:"expires "+label, band)+
+        '<div class="mut">'+(x.job?S.esc(S.jobType(x.job.type).n):"")+' · delivered '+S.dayLabel(x.g.delivered)+
+        ' · '+x.g.gb+' GB · '+S.money2(x.cost)+'/mo · '+x.g.downloads+' downloads'+
+        (x.g.selects?(' · '+x.g.selects+' selects'):'')+'</div>'+
+        (x.state==="expired"&&x.g.downloads<5?'<div class="mods"><b>Nobody downloaded this before it expired.</b> If they come back asking, you still have it — but they do not know that.</div>':'')+
+        '<div class="ri-act"><button class="btn small" data-ret="'+x.g.id+'">Take it off the shelf</button></div></div></div>'));
+    });
+    [].forEach.call(host.querySelectorAll("[data-ret]"),function(b){ b.addEventListener("click",function(){
+      S.retireGallery(b.dataset.ret); S.toast("Retired. Archive it somewhere cold before you need the space."); draw(); }); });
+  }
+  content.appendChild(S.card('<h2>Delivered</h2><div id="gl"></div>'));
+  draw();
+
+})();
+</script>
+</body>
+</html>

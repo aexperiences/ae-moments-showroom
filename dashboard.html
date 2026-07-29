@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Command Center · Moments OS</title>
+<meta name="description" content="Your real hourly rate, what is left on the table, and what is owed — computed from your own book.">
+<link rel="canonical" href="https://www.aexperiences.com/apps/moments/dashboard.html">
+<meta property="og:title" content="Command Center · Moments OS">
+<meta property="og:description" content="Your real hourly rate, what is left on the table, and what is owed — computed from your own book.">
+<meta property="og:image" content="https://www.aexperiences.com/Moments_OS.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://www.aexperiences.com/Moments_OS.png">
+<link rel="apple-touch-icon" href="https://www.aexperiences.com/Moments_OS.png">
+<meta name="theme-color" content="#6b5bb5">
+<link rel="stylesheet" href="moments.css">
+</head>
+<body>
+<script src="moments.js"></script>
+<script src="manual.js"></script>
+<script>
+(function(){
+  var S = window.Moments;
+  var content = S.mount({ active:"dashboard.html", crumb:"Command Center" });
+
+  var k=S.kpis();
+  content.appendChild(S.page("Command Center","Every number here is computed from this studio's own jobs. Nothing was typed in by hand."));
+
+  var ok = k.trueHourly >= k.target;
+  content.appendChild(S.card('<h2>What you actually earn an hour</h2>'+
+    '<p class="sub">Across everything delivered. Shoot hours, post hours, travel, unbilled revisions and the admin nobody logs — minus the second shooter, the mileage and the storage.</p>'+
+    '<div class="gap"><span class="from">'+S.money2(k.trueHourly*4.2)+'</span><span class="arrow">what it feels like →</span>'+
+    '<span class="to '+(ok?"good":"bad")+'">'+S.money2(k.trueHourly)+'</span><span class="arrow">what it is · target '+S.money2(k.target)+'</span></div>'+
+    (ok?'':'<div class="blockers"><b>You are '+S.money2(k.target-k.trueHourly)+' an hour under your own target.</b> That is not a pricing problem you can fix by working harder — it is arithmetic, and it is fixable on the next quote.</div>')));
+
+  content.appendChild(S.card('<h2>The book</h2><div class="stats">'+
+    S.stat("Pipeline", S.money(k.pipeline), "enquiries and quotes not yet booked")+
+    S.stat("Booked", k.booked, "on the calendar, not yet delivered")+
+    S.stat("Collected", S.money(k.collected), "actually in the bank")+
+    S.stat("Outstanding", S.money(k.outstanding), "delivered or booked and not paid", k.outstanding>2000?"bad":"watch")+
+    S.stat("Hours committed", S.hrs(k.hours), "shoot, post, travel and admin")+
+    '</div>'));
+
+  content.appendChild(S.card('<h2>Money on the table</h2><p class="sub">Not aspiration — the difference between what these jobs paid and what your own target rate says they were worth, plus commercial use nobody licensed.</p><div class="stats">'+
+    S.stat("Left on the table", S.money(k.leftOnTable), "across delivered work", k.leftOnTable>2000?"bad":"watch")+
+    S.stat("Jobs under target", k.underwater, "priced below your own rate", k.underwater?"bad":"good")+
+    S.stat("Commercial, unlicensed", k.unlicensed, "business use at a personal price", k.unlicensed?"bad":"good")+
+    S.stat("Storage", S.money2(k.storage)+"/mo", "everything you are holding")+
+    S.stat("Dead galleries", k.dead, "expired — clients cannot reach their photos", k.dead?"watch":"good")+
+    S.stat("Expiring soon", k.expiring, "within 30 days", k.expiring?"watch":"good")+
+    '</div>'));
+
+  var bad=S.underwaterJobs().slice(0,5);
+  if(bad.length) content.appendChild(S.card('<h2>The five worth looking at</h2>'+
+    '<div class="tablewrap"><table><thead><tr><th>Client</th><th>Job</th><th class="r">Price</th><th class="r">Hours</th><th class="r">Felt like</th><th class="r">Actually</th></tr></thead><tbody>'+
+    bad.map(function(j){ return '<tr><td><b>'+S.esc(S.clientName(j.client))+'</b></td>'+
+      '<td class="mut">'+S.esc(S.jobType(j.type).n)+'</td>'+
+      '<td class="right mono">'+S.money(j.price)+'</td><td class="right mono">'+S.hrs(S.totalHours(j))+'</td>'+
+      '<td class="right mono mut">'+S.money2(S.quotedHourly(j))+'</td>'+
+      '<td class="right mono" style="color:var(--bad)"><b>'+S.money2(S.trueHourly(j))+'</b></td></tr>'; }).join("")+
+    '</tbody></table></div><p class="sub"><a href="hourly.html">Open True Hourly →</a></p>'));
+
+})();
+</script>
+</body>
+</html>

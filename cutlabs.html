@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cutlabs Editor · Moments OS</title>
+<meta name="description" content="A real timeline editor built by Accelerated Experiences LLC — included in every tier.">
+<link rel="canonical" href="https://www.aexperiences.com/apps/moments/cutlabs.html">
+<meta property="og:title" content="Cutlabs Editor · Moments OS">
+<meta property="og:description" content="A real timeline editor built by Accelerated Experiences LLC — included in every tier.">
+<meta property="og:image" content="https://www.aexperiences.com/Moments_OS.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://www.aexperiences.com/Moments_OS.png">
+<link rel="apple-touch-icon" href="https://www.aexperiences.com/Moments_OS.png">
+<meta name="theme-color" content="#6b5bb5">
+<link rel="stylesheet" href="moments.css">
+</head>
+<body>
+<script src="moments.js"></script>
+<script src="manual.js"></script>
+<script>
+(function(){
+  var S = window.Moments;
+  var content = S.mount({ active:"cutlabs.html", crumb:"Cutlabs video editor" });
+
+  content.appendChild(S.page("Cutlabs","A real editor, not a link to somebody else's subscription. Timeline, trim, captions, zoom punches, freeze frames, slow motion, sound effects and export."));
+  content.appendChild(S.card('<h2>Open the editor</h2><p class="sub">Cutlabs runs in the browser. It is included in every tier of Moments OS — Starter as well, because a photographer who shoots video should not have to buy a second product to cut it.</p>'+
+    '<div class="ri-act"><a class="btn primary big" href="https://ae-video-studio.vercel.app/" target="_blank" rel="noopener">Open Cutlabs →</a></div>'));
+  content.appendChild(S.card('<h2>What is in it</h2><div class="stats">'+
+    ["Timeline with trim","Captions","Zoom punches","Freeze frames","Slow motion","Sound effects","LUT / colour","Media bin","Export"]
+      .map(function(x){ return S.stat(x,"✓","","good"); }).join("")+'</div>'));
+  content.appendChild(S.card('<h2>Why this matters to the price</h2><p class="sub">Every other business tool a photographer buys — the CRM, the gallery host, the bookkeeping — assumes editing happens somewhere else, in a product with its own monthly fee. Bundling a working editor is the single thing that makes Moments OS cheaper than the stack it replaces rather than another line item on top of it.</p>'));
+
+})();
+</script>
+</body>
+</html>
