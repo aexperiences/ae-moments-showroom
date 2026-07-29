@@ -558,8 +558,18 @@
   function toast(m){ var w=document.getElementById("toast-wrap"); if(!w) return;
     var t=el('<div class="toast">'+esc(m)+'</div>'); w.appendChild(t);
     setTimeout(function(){ t.classList.add("out"); setTimeout(function(){ t.remove(); },400); },2600); }
+  /* The fleet-wide Command Center polish layer. One file on the store, loaded by
+     every product, so a change lands everywhere at once instead of fourteen times. */
+  function loadFlava(){
+    if(document.getElementById("aeFlavaCss")) return;
+    var l=document.createElement("link"); l.id="aeFlavaCss"; l.rel="stylesheet";
+    l.href="https://www.aexperiences.com/ae-flava.css"; document.head.appendChild(l);
+    var j=document.createElement("script"); j.src="https://www.aexperiences.com/ae-flava.js";
+    j.defer=true; document.head.appendChild(j);
+  }
+
   function mount(o){
-    o=o||{}; db();
+    o=o||{}; db(); loadFlava();
     document.body.innerHTML='<div class="app" id="appRoot"><div class="main">'+
       '<div class="topwrap"></div><div class="ribwrap"></div><div class="content" id="content"></div>'+
       '<div class="footwrap"></div></div></div><div id="toast-wrap"></div><div class="mobwrap"></div>';
