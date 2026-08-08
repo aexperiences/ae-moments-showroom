@@ -667,3 +667,10 @@ body.signer{background:var(--paper);margin:0}
 .gap .to.bad{color:var(--bad)} .gap .to.good{color:var(--good)}
 .licrow{display:grid;grid-template-columns:1fr auto;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-2)}
 .licrow b{font-family:var(--mono)}
+
+
+/* Seven-figure money was clipping at the card edge: grid children default to
+   min-width:auto and refuse to shrink, so the value overflowed. Fixed. */
+.stat{ min-width:0 }
+.stat .s-v{ font-size:clamp(15px, 4.4vw, 22px); min-width:0; white-space:nowrap; letter-spacing:-.035em }
+.stat.headline .s-v{ font-size:clamp(17px, 5.1vw, 26px) }
