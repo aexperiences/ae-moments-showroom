@@ -377,13 +377,13 @@
     portal:  {name:"Client portal",          mo:19, build:160}
   };
   var TIERS = {
-    starter:  {name:"Starter", mo:99, build:600,
+    starter:  {name:"Core", mo:99, build:0,
       includes:["jobs","hourly","galleries","contracts","money","cutlabs"],
       blurb:"One person. Enquiries, shoots, contracts, galleries, invoices — and the video editor. Replaces the whole stack you pay for now."},
-    studio:   {name:"Studio", mo:199, build:1200,
+    studio:   {name:"Elite", mo:199, build:0,
       includes:["jobs","hourly","galleries","contracts","money","cutlabs","licence","prints","portal"],
       blurb:"A second shooter, print sales, usage licensing and a branded client portal."},
-    signature:{name:"Signature", mo:329, build:2000,
+    signature:{name:"Mothership", mo:329, build:0,
       includes:["jobs","hourly","galleries","contracts","money","cutlabs","licence","prints","portal"],
       blurb:"Commercial work — larger storage, your own domain, a dedicated environment and priority support."}
   };
