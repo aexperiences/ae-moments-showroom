@@ -84,9 +84,10 @@
 
   var REPLACES = [
     ["A CRM + contract tool (Honeybook, Dubsado)","$35–39/mo"],
-    ["A gallery host (Pixieset, Pic-Time)","$20–40/mo"],
+    ["A gallery host + proofing platform (Pixieset, Pic-Time, ShootProof)","$20–40/mo"],
     ["Bookkeeping","$20–30/mo"],
     ["A separate e-sign tool","$15–25/mo"],
+    ["Photo culling & finishing in someone else's app","subscription, forever"],
     ["Video editing you do in someone else's app","subscription, forever"],
     ["The spreadsheet where you guess your hourly rate","hours, and it is wrong"]
   ];
@@ -378,13 +379,13 @@
   };
   var TIERS = {
     starter:  {name:"Core", mo:99, build:0,
-      includes:["jobs","hourly","galleries","contracts","money","cutlabs"],
-      blurb:"One person. Enquiries, shoots, contracts, galleries, invoices — and the video editor. Replaces the whole stack you pay for now."},
+      includes:["jobs","hourly","galleries","contracts","money","cutlabs","darkroom","proofs"],
+      blurb:"One person. Enquiries, shoots, contracts, galleries, invoices — and real photo AND video software: the Darkroom, client proofing, and the Cutlabs editor. Replaces the whole stack you pay for now."},
     studio:   {name:"Elite", mo:199, build:0,
-      includes:["jobs","hourly","galleries","contracts","money","cutlabs","licence","prints","portal"],
-      blurb:"A second shooter, print sales, usage licensing and a branded client portal."},
+      includes:["jobs","hourly","galleries","contracts","money","cutlabs","darkroom","proofs","licence","prints","portal"],
+      blurb:"A second shooter, print sales, usage licensing and a branded client portal. Photo and video software in this tier too — every tier."},
     signature:{name:"Mothership", mo:329, build:0,
-      includes:["jobs","hourly","galleries","contracts","money","cutlabs","licence","prints","portal"],
+      includes:["jobs","hourly","galleries","contracts","money","cutlabs","darkroom","proofs","licence","prints","portal"],
       blurb:"Commercial work — larger storage, your own domain, a dedicated environment and priority support."}
   };
   function tier(){ return db().tier||"studio"; }
@@ -448,7 +449,9 @@
       {h:"jobs.html",      l:"Jobs & Pipeline",i:"✦", room:"jobs"},
       {h:"hourly.html",    l:"True Hourly",    i:"◭", room:"hourly"},
       {h:"galleries.html", l:"Galleries",      i:"▦", room:"galleries"},
-      {h:"cutlabs.html",   l:"Cutlabs Editor", i:"▶", room:"cutlabs"}]},
+      {h:"cutlabs.html",   l:"Cutlabs Editor", i:"▶", room:"cutlabs", icon:"icons/cutlabs.png"},
+      {h:"darkroom.html", l:"Darkroom · Photo", i:"◐", room:"darkroom"},
+      {h:"proofs.html",   l:"Proofing · Selects", i:"❤", room:"proofs"}]},
     {g:"PAPER & MONEY", items:[
       {h:"licence.html",   l:"Usage Licensing",i:"⛉", room:"licence"},
       {h:"money.html",     l:"Money & Retainers",i:"◧", room:"money"},
@@ -553,7 +556,7 @@
       'The studio, clients and jobs below are a realistic sample book. '+
       '<button class="linkbtn" id="goLiveBtn">Start with a clean slate</button></div>');
   }
-  function footer(){ return el('<div class="ae-credit"><a href="https://www.aexperiences.com/" class="ae-triad" aria-label="AETRIAD Powered - Accelerated Experiences LLC"><img src="/marks/aetriad-powered.png" alt="AETRIAD Powered" style="height:30px;width:auto;vertical-align:middle"></a><br>Moments OS is a '+
+  function footer(){ return el('<div class="ae-credit"><a href="https://www.aexperiences.com/" class="ae-triad" aria-label="AETRIAD Powered - Accelerated Experiences LLC"><img src="/marks/aos/aos-business.png" alt="Accelerated Operating Systems" style="height:30px;width:auto;vertical-align:middle"></a><br>Moments OS is a '+
     'white-label product — your studio name and colours replace ours.</div>'); }
   function toast(m){ var w=document.getElementById("toast-wrap"); if(!w) return;
     var t=el('<div class="toast">'+esc(m)+'</div>'); w.appendChild(t);
@@ -627,7 +630,7 @@
     var SYN={rate:"hourly",money:"money",price:"pricing",charge:"pricing",worth:"hourly",
       edit:"revisions",edits:"revisions",revision:"revisions",
       rights:"licence",license:"licence",licence:"licence",commercial:"licence",usage:"licence",
-      video:"cutlabs",editor:"cutlabs",editing:"cutlabs",
+      video:"cutlabs",editor:"cutlabs",editing:"cutlabs",darkroom:"darkroom",retouch:"darkroom",proofing:"proofs",proofs:"proofs",selects:"proofs",
       photos:"gallery",images:"gallery",delivery:"gallery",storage:"storage",
       contract:"esign",sign:"esign",signature:"esign",own:"ownership",owns:"ownership"};
     var words=q.split(/[^a-z0-9]+/).filter(Boolean).map(function(w){ return SYN[w]||w; });
@@ -1060,3 +1063,24 @@
   else boot();
 
 })(window);
+
+/* BIRDSEYE:BEGIN — added by machines/birdseye/convert.py. Wraps Moments.mount() so every page gets the
+   Birdseye shell (header, floor plan, dock, More sheet, helper tab). Legacy functions are untouched.
+   To undo: `python3 convert.py undo <repo>` (or delete from BEGIN to END). */
+(function () {
+  var G = window["Moments"]; if (!G || typeof G.mount !== 'function' || G.__birdseye) return; G.__birdseye = true;
+  var me = document.currentScript, base = me && me.src ? me.src.replace(/[^\/]*(\?.*)?$/, '') : '';
+  var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = base + 'birdseye/birdseye.css'; document.head.appendChild(l);
+  var ready = false, queue = [];
+  function load(src, cb) { var s = document.createElement('script'); s.src = src; s.onload = cb; s.onerror = cb; document.head.appendChild(s); }
+  load(base + 'birdseye/birdseye-shell.js', function () { load(base + 'birdseye.config.js', function () { ready = true; queue.splice(0).forEach(function (f) { f(); }); }); });
+  var legacyMount = G.mount;
+  G.mount = function (o) {
+    document.documentElement.classList.add('bs-on', 'bs-pending');
+    var c = legacyMount.apply(this, arguments);
+    function go() { try { if (window.BirdseyeShell && window.BIRDSEYE) window.BirdseyeShell.adopt({ config: window.BIRDSEYE, active: o && o.active, content: c }); } catch (e) { if (window.console) console.error('[birdseye]', e); } document.documentElement.classList.remove('bs-pending'); }
+    if (ready) go(); else queue.push(go);
+    return c;
+  };
+})();
+/* BIRDSEYE:END */
