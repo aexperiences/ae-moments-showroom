@@ -78,23 +78,23 @@
   var T=window.Moments;
   var c=T.mount({active:"connect.html",crumb:"Connect"});
   var API=window.SLEEVES_API+'/api/connect'; var NS="moments";
-  var TEAM=[
-    {slug:"mira",name:"Mira Halloway",role:"Owner / Artist",init:"MH"},
-    {slug:"dez",name:"Dez Okonkwo",role:"Artist · blackwork",init:"DO"},
-    {slug:"saoirse",name:"Saoirse Bell",role:"Artist · fine line",init:"SB"},
-    {slug:"ruben",name:"Ruben Castellanos",role:"Artist · black & grey",init:"RC"},
-    {slug:"wren",name:"Wren Ashby",role:"Apprentice",init:"WA"}
-  ];
+  /* The team — read from this system's own seeded people, never typed in here. */
+  var TEAM=(function(){ var D={}; try{ D=T.db()||{}; }catch(e){} var out=[], seen={};
+    function add(n,r){ n=String(n||"").trim(); if(!n||seen[n]) return; seen[n]=1;
+      var w=n.replace(/^Coach\s+/,"").replace(/,.*$/,"").split(/\s+/);
+      out.push({slug:n.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,""),name:n,role:String(r||""),init:(((w[0]||"")[0]||"")+(w.length>1?w[w.length-1][0]:((w[0]||"")[1]||""))).toUpperCase()}); }
+    try{ var s=D.studio||{}; add(s.owner,"Owner · Photographer"); }catch(e){}
+    return out; })();
   var CHANNELS=[
-    {ch:"floor",name:"#floor",desc:"Whatever the shop needs to see."},
-    {ch:"queue",name:"#queue",desc:"New requests, quotes, deposits."},
-    {ch:"flash",name:"#flash",desc:"New flash going up, what has moved."},
-    {ch:"clean",name:"#clean",desc:"Sterility, sharps, health-department readiness."}
+    {ch:"studio",name:"#studio",desc:"Whatever the studio needs to see."},
+    {ch:"bookings",name:"#bookings",desc:"Inquiries, consults, retainers."},
+    {ch:"delivery",name:"#delivery",desc:"Edits, galleries and prints going out."},
+    {ch:"second",name:"#second-shooters",desc:"Coverage, shot lists, call times."}
   ];
   var ROOMS=[
-    {key:"standup",label:"Morning standup",sub:"The day’s book, walk-ins, no-shows."},
-    {key:"consult",label:"Consultation",sub:"A client, a reference pile, and the artist."},
-    {key:"critique",label:"Portfolio critique",sub:"Healed photos and technique review."}
+    {key:"consult",label:"Client consult",sub:"The couple or client, their plans, the timeline."},
+    {key:"selects",label:"Selects review",sub:"The edit and the gallery on screen."},
+    {key:"walkthrough",label:"Day-of walkthrough",sub:"Shot list and timing with the planner."}
   ];
   function me(){ try{ return JSON.parse(sessionStorage.getItem("moments_connect_me")); }catch(e){ return null; } }
   function setMe(p){ sessionStorage.setItem("moments_connect_me",JSON.stringify(p)); }

@@ -44,31 +44,30 @@
 (function () {
   var T=window.Moments;
   var c=T.mount({active:"records.html",crumb:"Records"});
-  var KEY="moments_records_v1";
+  var KEY="moments_records_v2";
 
   /* The filing plan — one cabinet per real thing the firm keeps. */
   var CABINETS=[
-    {k:"waivers",ic:"📄",name:"Waivers & consent",desc:"Signed per-session waivers, health screenings, ID copies."},
-    {k:"licences",ic:"⛨",name:"Licences & certs",desc:"Bloodborne cards, artist registrations, shop licence."},
-    {k:"health",ic:"♥",name:"Health department",desc:"Inspections, spore test results, corrective actions."},
-    {k:"booth",ic:"⚖",name:"Booth agreements",desc:"Artist rental contracts, splits, guest-artist terms."},
-    {k:"flash",ic:"◉",name:"Flash & designs",desc:"Flash sheets, custom drawings, who owns what."},
-    {k:"portfolio",ic:"📷",name:"Portfolio",desc:"Healed photos and releases to publish them."},
-    {k:"insurance",ic:"🛡",name:"Insurance",desc:"Liability policy, COIs, incident reports."},
-    {k:"money",ic:"💵",name:"Money",desc:"Price list, deposits, booth-rent ledger, tax filings."}
+    {k:"contracts",ic:"📄",name:"Contracts & releases",desc:"Booking contracts, model releases, second-shooter agreements."},
+    {k:"licences",ic:"⛨",name:"Usage licenses",desc:"What each commercial client may do with the images, and for how long."},
+    {k:"galleries",ic:"📷",name:"Galleries & delivery",desc:"Delivered galleries, expiry dates, download records."},
+    {k:"clients",ic:"🤝",name:"Client files",desc:"Questionnaires, timelines and shot lists by job."},
+    {k:"money",ic:"💵",name:"Money",desc:"Retainers, invoices, tax filings."},
+    {k:"gear",ic:"🛡",name:"Gear & insurance",desc:"Equipment list, liability policy, venue COIs."}
   ];
 
-  /* Seeded records — real McArthur artifacts where they exist, honestly labeled. */
-  var SEED=[
-    {cab:"waivers",name:"Signed waiver — Tegan Moreau",kind:"pdf",tag:"sot",who:"Mira Halloway",when:"2026-07-24",note:""},
-    {cab:"licences",name:"Bloodborne cert — S. Bell",kind:"pdf",tag:"",who:"Mira Halloway",when:"2025-06-14",note:"EXPIRED"},
-    {cab:"health",name:"Panhandle Health inspection — pass",kind:"pdf",tag:"sot",who:"Mira Halloway",when:"2026-04-18",note:""},
-    {cab:"health",name:"Autoclave spore test — weekly log",kind:"csv",tag:"sot",who:"Mira Halloway",when:"2026-07-27",note:""},
-    {cab:"booth",name:"Booth rental — Wren Ashby",kind:"pdf",tag:"sot",who:"Mira Halloway",when:"2026-02-03",note:""},
-    {cab:"flash",name:"Flash wall inventory — current",kind:"csv",tag:"sot",who:"Mira Halloway",when:"2026-07-26",note:""},
-    {cab:"insurance",name:"Liability policy — 2026",kind:"pdf",tag:"sot",who:"Mira Halloway",when:"2026-01-08",note:""},
-    {cab:"money",name:"Price list & deposit policy — 2026",kind:"pdf",tag:"sot",who:"Mira Halloway",when:"2026-03-02",note:""}
-  ];
+  /* Seeded records — built from this system's own book (its people, jobs and paperwork), never typed in. */
+  var SEED=(function(){ var D={}; try{ D=T.db()||{}; }catch(e){} var out=[], today=((T.TODAY instanceof Date)?T.TODAY:new Date()).toISOString().slice(0,10);
+    function add(cab,name,kind,tag,who,when,note){ if(name) out.push({cab:cab,name:String(name),kind:kind||"pdf",tag:tag||"",who:who||"",when:when||"",note:note||""}); }
+    function exp(d){ return !d||!/^\d{4}-/.test(d)?"":(d<today?"EXPIRED":"Expires "+d); }
+    try{ var O=(D.studio||{}).owner||"", CN={}, JT={}, LT={}; (D.clients||[]).forEach(function(c){CN[c.id]=c.name;}); (T.JOB_TYPES||[]).forEach(function(t){JT[t.k]=t.n||t.name||t.k;}); (T.LICENSE_TERMS||[]).forEach(function(t){LT[t.k]=t.n;});
+      (D.jobs||[]).forEach(function(j){ var who=CN[j.client]||""; add("contracts","Booking contract — "+who+" · "+(JT[j.type]||j.type),"pdf",j.stage==="Inquiry"?"":"sot",O,j.date,j.stage);
+        if(j.lic&&j.lic!=="none") add("licences","Usage license — "+who+" · "+(LT[j.lic]||j.lic),"pdf","sot",O,j.date,"");
+        if(j.second) add("contracts","Second-shooter agreement — "+who,"pdf","sot",O,j.date,"");
+        add("clients","Timeline & shot list — "+who,"doc","wip",O,j.date,"");
+        if(j.paid>0) add("money",(j.paid>=j.price?"Paid in full":"Retainer received")+" — "+who,"pdf","sot",O,j.date,""); });
+      (D.galleries||[]).forEach(function(g){ var j=(D.jobs||[]).filter(function(x){return x.id===g.job;})[0]||{}; add("galleries","Gallery — "+(CN[j.client]||g.id),"img","sot",O,g.delivered,"Expires "+g.expires+" · "+g.downloads+" downloads"); }); }catch(e){}
+    return out; })();
 
   function load(){ try{ var d=JSON.parse(sessionStorage.getItem(KEY)); if(d&&d.length) return d; }catch(e){} return SEED.slice(); }
   function persist(){ try{ sessionStorage.setItem(KEY,JSON.stringify(FILES)); }catch(e){} }
