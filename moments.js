@@ -472,7 +472,7 @@
       {h:"contacts.html",  l:"Contacts",       i:"☎"},
       {h:"connect.html",   l:"Connect · Video",i:"◉"},
       {h:"records.html",   l:"Records · Filing",i:"▤"},
-      {h:"approvals.html", l:"Approval Desk",  i:"✓"}]},
+      {h:"approvals.html", l:"Approval Desk",  i:"✓"}, {h:"masterlist.html", l:"Master List", i:"✎"}, {h:"mail.html", l:"Mail", i:"✉"} ]},
     {g:"THE WORK", items:[
       {h:"jobs.html",      l:"Jobs & Pipeline",i:"✦", room:"jobs"},
       {h:"hourly.html",    l:"True Hourly",    i:"◭", room:"hourly"},
@@ -484,9 +484,10 @@
       {h:"licence.html",   l:"Usage Licensing",i:"⛉", room:"licence"},
       {h:"money.html",     l:"Money & Retainers",i:"◧", room:"money"},
       {h:"sign.html",      l:"Contracts · e-Sign",i:"✍", room:"contracts"},
-      {h:"portal.html",    l:"Client Portal",  i:"☗", room:"portal"}]},
+      {h:"portal.html",    l:"Client Portal",  i:"☗", room:"portal"}, {h:"documents.html", l:"Documents", i:"▤"} ]},
     {g:"THE STUDIO", items:[
-      {h:"org.html",       l:"Agent Org · Bus",i:"❖"}]}
+      {h:"org.html",       l:"Agent Org · Bus",i:"❖"}, {h:"aimos.html", l:"Gear Locker", i:"▦"} ]},
+    {g:"THE HOUSE", items:[{h:"manual.html", l:"Owner's Manual", i:"?"}, {h:"it.html", l:"IT · System Health", i:"♥"}, {h:"hr.html", l:"HR · People Ops", i:"☷"}, {h:"skins.html", l:"Skins", i:"◐"}]}
   ];
   /* The chassis stylesheet targets .sidebar / .nav-group / .navlink .ic / .navlink .lb
      and .navlink.active. This used to emit .rail / .navgroup / .on, so the sidebar
