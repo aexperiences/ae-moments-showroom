@@ -639,7 +639,7 @@
     {t:"Costs a solo forgets", k:"costs second shooter mileage storage",
      b:"The second shooter, the mileage both ways, the album at trade cost, and twelve months of storage. None of them feel like costs on the day. All of them come out of the number you thought you earned."},
     {t:"The video editor is included, not an upsell", k:"cutlabs video editing",
-     b:"Cutlabs is a real editor we built — timeline, trim, captions, zoom punches, freeze frames, slow motion, sound effects and export. It is in every tier including Starter. No other business tool for photographers ships an editor, which is precisely why it is here."},
+     b:"Cutlabs is a real editor we built — timeline, trim, captions, zoom punches, freeze frames, slow motion, sound effects and export. It is in every tier including Core. No other business tool for photographers ships an editor, which is precisely why it is here."},
     {t:"e-Sign is ours", k:"esign signature contract docusign",
      b:"We built the signing layer ourselves — consent, intent, attribution to a named person, and a trail that freezes when it is signed. It is not a reseller wrapper around somebody else's product, so it is not a separate subscription."},
     {t:"You license the software; you own your work", k:"ownership own licence data export",
