@@ -416,19 +416,19 @@
       includes:["jobs","hourly","galleries","contracts","money","cutlabs","darkroom","proofs","licence","prints","portal"],
       blurb:"Commercial work — larger storage, your own domain, a dedicated environment and priority support."}
   };
-  function tier(){ return db().tier||"studio"; }
+  function tier(){ return db().tier||"signature"; }  /* the showroom opens on the top tier (Art. X); take rooms off to fit */
   function setTier(k){ return save(function(d){ d.tier=k; d.adds=[]; d.offs=[]; }); }
-  function activeRooms(){ var d=db(), t=TIERS[d.tier]||TIERS.studio, set=t.includes.slice();
+  function activeRooms(){ var d=db(), t=TIERS[d.tier]||TIERS.signature, set=t.includes.slice();
     (d.adds||[]).forEach(function(k){ if(set.indexOf(k)<0) set.push(k); });
     (d.offs||[]).forEach(function(k){ var i=set.indexOf(k); if(i>=0) set.splice(i,1); });
     return set; }
   function hasRoom(k){ return activeRooms().indexOf(k)>=0; }
   function toggleRoom(k){ return save(function(d){
-    var t=TIERS[d.tier]||TIERS.studio, inTier=t.includes.indexOf(k)>=0;
+    var t=TIERS[d.tier]||TIERS.signature, inTier=t.includes.indexOf(k)>=0;
     d.adds=d.adds||[]; d.offs=d.offs||[];
     if(inTier){ var i=d.offs.indexOf(k); if(i>=0) d.offs.splice(i,1); else d.offs.push(k); }
     else { var j=d.adds.indexOf(k); if(j>=0) d.adds.splice(j,1); else d.adds.push(k); } }); }
-  function priceNow(){ var d=db(), t=TIERS[d.tier]||TIERS.studio, mo=t.mo, build=t.build;
+  function priceNow(){ var d=db(), t=TIERS[d.tier]||TIERS.signature, mo=t.mo, build=t.build;
     (d.adds||[]).forEach(function(k){ if(ROOMS[k]){ mo+=ROOMS[k].mo; build+=ROOMS[k].build; } });
     (d.offs||[]).forEach(function(k){ if(ROOMS[k]){ mo-=ROOMS[k].mo; build-=ROOMS[k].build; } });
     return {mo:Math.max(0,mo), build:Math.max(0,build)}; }
