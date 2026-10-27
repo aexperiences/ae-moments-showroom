@@ -64,7 +64,7 @@
     '</tbody></table></div>'));
 
   /* Hand it to the accountant: a plain CSV any accounting program imports. */
-  var exp = S.card('<h2>Send it to your accountant</h2><p class="sub">One file, every job: date, client, job, price, costs, paid and owed. QuickBooks, Xero, Wave or a spreadsheet all open it.</p>'+
+  var exp = S.card('<h2>Send it to your accountant</h2><p class="sub">One file, every priced job: date, client, job, price, costs, paid and owed. QuickBooks, Xero, Wave or a spreadsheet all open it.</p>'+
     '<button class="btn" id="booksCsv">Download the books (CSV)</button>');
   content.appendChild(exp);
   exp.querySelector("#booksCsv").onclick=function(){
@@ -75,7 +75,7 @@
     a.download="moments-books.csv"; document.body.appendChild(a); a.click(); a.remove();
     S.toast("Books downloaded.","ok");
   };
-  content.appendChild(S.card(S.srcNote("Every figure on this page is computed from the jobs in this system. Nothing is estimated and nothing is typed in a second time.")));
+  content.appendChild(S.card(S.srcNote("Every figure on this page is computed from the jobs and the studio settings in this system. Nothing is estimated and nothing is typed in a second time.")));
 })();
 </script>
 </body>
