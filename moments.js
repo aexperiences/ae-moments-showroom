@@ -400,6 +400,7 @@
     galleries:{name:"Galleries & delivery",  mo:29, build:240},
     contracts:{name:"Contracts & e-sign",    mo:19, build:160},
     money:   {name:"Money & retainers",      mo:25, build:200},
+    books:   {name:"Books",                  mo:25, build:200},
     licence: {name:"Usage licensing",        mo:29, build:240},
     cutlabs: {name:"Cutlabs video editor",   mo:39, build:300},
     prints:  {name:"Print & product sales",  mo:19, build:160},
@@ -410,10 +411,10 @@
       includes:["jobs","hourly","galleries","contracts","money","cutlabs","darkroom","proofs"],
       blurb:"One person. Enquiries, shoots, contracts, galleries, invoices — and real photo AND video software: the Darkroom, client proofing, and the Cutlabs editor. Replaces the whole stack you pay for now."},
     studio:   {name:"Elite", mo:349, build:0,
-      includes:["jobs","hourly","galleries","contracts","money","cutlabs","darkroom","proofs","licence","prints","portal"],
+      includes:["jobs","hourly","galleries","contracts","money","books","cutlabs","darkroom","proofs","licence","prints","portal"],
       blurb:"A second shooter, print sales, usage licensing and a branded client portal. Photo and video software in this tier too — every tier."},
     signature:{name:"Mothership", mo:599, build:0,
-      includes:["jobs","hourly","galleries","contracts","money","cutlabs","darkroom","proofs","licence","prints","portal"],
+      includes:["jobs","hourly","galleries","contracts","money","books","cutlabs","darkroom","proofs","licence","prints","portal"],
       blurb:"Commercial work — larger storage, your own domain, a dedicated environment and priority support."}
   };
   function tier(){ return db().tier||"signature"; }  /* the showroom opens on the top tier (Art. X); take rooms off to fit */
@@ -483,6 +484,7 @@
     {g:"PAPER & MONEY", items:[
       {h:"licence.html",   l:"Usage Licensing",i:"⛉", room:"licence"},
       {h:"money.html",     l:"Money & Retainers",i:"◧", room:"money"},
+      {h:"books.html",     l:"Books",          i:"◭", room:"books"},
       {h:"sign.html",      l:"Contracts · e-Sign",i:"✍", room:"contracts"},
       {h:"portal.html",    l:"Client Portal",  i:"☗", room:"portal"}, {h:"documents.html", l:"Documents", i:"▤"} ]},
     {g:"THE STUDIO", items:[

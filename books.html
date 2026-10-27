@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Books · Moments OS V3.5</title>
+<meta name="description" content="The studio's books, kept from the jobs themselves: what was earned, what it cost, what came in and what is still owed. One click to hand it to your accountant.">
+<link rel="canonical" href="https://www.aexperiences.com/apps/moments/books.html">
+<meta property="og:title" content="Books · Moments OS">
+<meta property="og:description" content="The studio's books, kept from the jobs themselves — earned, cost, collected, owed.">
+<meta property="og:image" content="https://www.aexperiences.com/Moments_OS.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="https://www.aexperiences.com/Moments_OS.png">
+<link rel="apple-touch-icon" href="https://www.aexperiences.com/Moments_OS.png">
+<meta name="theme-color" content="#6b5bb5">
+<link rel="stylesheet" href="moments.css">
+</head>
+<body>
+<script src="moments.js"></script>
+<script src="manual.js"></script>
+<script>
+(function(){
+  var S = window.Moments;
+  var content = S.mount({ active:"books.html", crumb:"Books" });
+
+  content.appendChild(S.page("Books","Kept from the jobs themselves. Nothing is typed in twice: the price on the job, the second shooter, the miles and the storage are the books."));
+
+  var jobs = S.db().jobs.filter(function(j){ return j.stage!=="Lost" && (j.price||0)>0; });
+  var done = jobs.filter(function(j){ return j.stage==="Delivered" || j.stage==="Closed"; });
+  var earned   = done.reduce(function(a,j){ return a+(j.price||0); },0);
+  var direct   = done.reduce(function(a,j){ return a+S.jobCosts(j).total; },0);
+  var gross    = earned - direct;
+  var archive  = S.storageCostMonthly()*12;
+  var net      = gross - archive;
+  var k = S.kpis();
+
+  /* Profit and loss — earned work only. Booked work is not income until it is delivered. */
+  content.appendChild(S.card('<h2>Profit and loss</h2><p class="sub">Delivered and closed jobs. Booked work is not income until it is delivered.</p>'+
+    '<div class="tablewrap"><table><tbody>'+
+    '<tr><td><b>Income earned</b></td><td class="right mono"><b>'+S.money(earned)+'</b></td></tr>'+
+    '<tr><td class="mut">Less: second shooters, mileage, gallery storage</td><td class="right mono">−'+S.money(direct)+'</td></tr>'+
+    '<tr><td><b>Gross profit</b></td><td class="right mono"><b>'+S.money(gross)+'</b></td></tr>'+
+    '<tr><td class="mut">Less: a year of archive storage</td><td class="right mono">−'+S.money(archive)+'</td></tr>'+
+    '<tr><td><b>Net to you</b></td><td class="right mono"><b>'+S.money(net)+'</b></td></tr>'+
+    '</tbody></table></div>'));
+
+  content.appendChild(S.card('<h2>Cash</h2><div class="stats">'+
+    S.stat("Collected", S.money(k.collected), "in the bank")+
+    S.stat("Owed to you", S.money(k.outstanding), "billed, not paid", k.outstanding>2000?"bad":(k.outstanding>0?"watch":"good"))+
+    S.stat("Booked ahead", S.money(S.booked().reduce(function(a,j){ return a+(j.price||0); },0)), "not earned yet")+
+    S.stat("Margin", earned>0? S.pct(gross/earned*100) : "—", "after direct costs", earned>0 && gross/earned<0.6?"watch":"good")+
+    '</div>'));
+
+  /* The ledger — one row per priced job. */
+  var rows = jobs.slice().sort(function(a,b){ return (a.date<b.date)?-1:1; });
+  content.appendChild(S.card('<h2>The ledger</h2><p class="sub">One line per priced job. Costs come from the job, not from memory.</p><div class="tablewrap"><table>'+
+    '<thead><tr><th>Date</th><th>Client</th><th>Job</th><th>Stage</th><th class="right">Price</th><th class="right">Costs</th><th class="right">Paid</th><th class="right">Owed</th></tr></thead><tbody>'+
+    rows.map(function(j){ var c=S.jobCosts(j).total, owed=Math.max(0,(j.price||0)-(j.paid||0));
+      return '<tr><td class="mono">'+S.esc(S.dayLabel?S.dayLabel(j.date):j.date)+'</td><td><b>'+S.esc(S.clientName(j.client))+'</b></td>'+
+        '<td class="mut">'+S.esc(S.jobType(j.type).n)+'</td><td>'+S.tag(j.stage)+'</td>'+
+        '<td class="right mono">'+S.money(j.price)+'</td><td class="right mono">'+S.money(c)+'</td>'+
+        '<td class="right mono">'+S.money(j.paid||0)+'</td><td class="right mono">'+(owed?'<b>'+S.money(owed)+'</b>':'—')+'</td></tr>'; }).join("")+
+    '</tbody></table></div>'));
+
+  /* Hand it to the accountant: a plain CSV any accounting program imports. */
+  var exp = S.card('<h2>Send it to your accountant</h2><p class="sub">One file, every job: date, client, job, price, costs, paid and owed. QuickBooks, Xero, Wave or a spreadsheet all open it.</p>'+
+    '<button class="btn" id="booksCsv">Download the books (CSV)</button>');
+  content.appendChild(exp);
+  exp.querySelector("#booksCsv").onclick=function(){
+    var q=function(v){ v=String(v==null?"":v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; };
+    var lines=[["Date","Client","Job","Stage","Price","Costs","Paid","Owed"].join(",")].concat(rows.map(function(j){
+      var c=S.jobCosts(j).total; return [j.date, S.clientName(j.client), S.jobType(j.type).n, j.stage, j.price||0, c, j.paid||0, Math.max(0,(j.price||0)-(j.paid||0))].map(q).join(","); }));
+    var a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([lines.join("\n")],{type:"text/csv"}));
+    a.download="moments-books.csv"; document.body.appendChild(a); a.click(); a.remove();
+    S.toast("Books downloaded.","ok");
+  };
+  content.appendChild(S.card(S.srcNote("Every figure on this page is computed from the jobs in this system. Nothing is estimated and nothing is typed in a second time.")));
+})();
+</script>
+</body>
+</html>
