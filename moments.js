@@ -406,13 +406,13 @@
     portal:  {name:"Client portal",          mo:19, build:160}
   };
   var TIERS = {
-    starter:  {name:"Core", mo:99, build:0,
+    starter:  {name:"Core", mo:199, build:0,
       includes:["jobs","hourly","galleries","contracts","money","cutlabs","darkroom","proofs"],
       blurb:"One person. Enquiries, shoots, contracts, galleries, invoices — and real photo AND video software: the Darkroom, client proofing, and the Cutlabs editor. Replaces the whole stack you pay for now."},
-    studio:   {name:"Elite", mo:199, build:0,
+    studio:   {name:"Elite", mo:349, build:0,
       includes:["jobs","hourly","galleries","contracts","money","cutlabs","darkroom","proofs","licence","prints","portal"],
       blurb:"A second shooter, print sales, usage licensing and a branded client portal. Photo and video software in this tier too — every tier."},
-    signature:{name:"Mothership", mo:329, build:0,
+    signature:{name:"Mothership", mo:599, build:0,
       includes:["jobs","hourly","galleries","contracts","money","cutlabs","darkroom","proofs","licence","prints","portal"],
       blurb:"Commercial work — larger storage, your own domain, a dedicated environment and priority support."}
   };
@@ -562,7 +562,7 @@
       '<b>'+money(t.mo)+'/mo</b></div>'+
       (adds.length?'<div class="tt-line add"><span>+ '+adds.length+' room'+(adds.length>1?'s':'')+' added</span><b>+'+money(pr.mo-t.mo>0?pr.mo-t.mo:0)+'/mo</b></div>':'')+
       (offs.length?'<div class="tt-line off"><span>− '+offs.length+' room'+(offs.length>1?'s':'')+' removed</span><b>−'+money(t.mo-pr.mo>0?t.mo-pr.mo:0)+'/mo</b></div>':'')+
-      '<div class="tt-line grand"><span>Your build</span><b>'+money(pr.mo)+'/mo licensed</b></div></div>'));
+      '<div class="tt-line grand"><span>White-label build</span><b>'+money(pr.mo)+'/mo licensed</b></div></div>'));
     bar.appendChild(menu);
 
     var pill=bar.querySelector("#tierPill");
