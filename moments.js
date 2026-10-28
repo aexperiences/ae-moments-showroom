@@ -407,7 +407,7 @@
     portal:  {name:"Client portal",          mo:19, build:160}
   };
   var TIERS = {
-    starter:  {name:"Core", mo:209, build:0,
+    starter:  {name:"Core", mo:199, build:0,
       includes:["jobs","hourly","galleries","contracts","money","cutlabs","darkroom","proofs"],
       blurb:"One person. Enquiries, shoots, contracts, galleries, invoices — and real photo AND video software: the Darkroom, client proofing, and the Cutlabs editor. Replaces the whole stack you pay for now."},
     studio:   {name:"Elite", mo:349, build:0,
